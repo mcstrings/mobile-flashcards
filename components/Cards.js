@@ -11,8 +11,6 @@ export default class Cards extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={{ fontSize: 32 }}>Deck Title</Text>
-
                 <Text>5 Cards</Text>
 
                 <View style={styles.bottom}>
@@ -22,7 +20,9 @@ export default class Cards extends Component {
                                 ? styles.iosSubmitOutlineBtn
                                 : styles.androidSubmitOutlineBtn
                         }
-                        // onPress={onPress}
+                        onPress={() =>
+                            this.props.navigation.navigate('NewQuestion')
+                        }
                     >
                         <Text style={styles.submitOutlineBtnText}>Add a Card...</Text>
                     </TouchableOpacity>
@@ -33,7 +33,9 @@ export default class Cards extends Component {
                                 ? styles.iosSubmitBtn
                                 : styles.androidSubmitBtn
                         }
-                        // onPress={onPress}
+                        onPress={() =>
+                            this.props.navigation.navigate('Question')
+                        }
                     >
                         <Text style={styles.submitBtnText}>Start the Quiz</Text>
                     </TouchableOpacity>

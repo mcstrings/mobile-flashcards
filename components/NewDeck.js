@@ -14,8 +14,6 @@ export default class NewDeck extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={{ fontSize: 32 }}>Create a Deck</Text>
-
                 <Text>Title</Text>
                 <TextInput
                     style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
@@ -30,7 +28,9 @@ export default class NewDeck extends Component {
                                 ? styles.iosSubmitBtn
                                 : styles.androidSubmitBtn
                         }
-                        // onPress={onPress}
+                        onPress={() =>
+                            this.props.navigation.navigate('Decks')
+                        }
                     >
                         <Text style={styles.submitBtnText}>Save</Text>
                     </TouchableOpacity>
@@ -46,33 +46,19 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: 'white'
     },
-    row: {
-        flexDirection: 'row',
-        flex: 1,
-        alignItems: 'center'
-    },
     bottom: {
         flex: 1,
         justifyContent: 'flex-end'
-    },
-    score: {
-        alignItems: 'center',
-        color: '#28AE28',
-        fontSize: 100
     },
     iosSubmitBtn: {
         backgroundColor: '#007AFF',
         padding: 10,
         borderRadius: 7,
         height: 45
-        // marginLeft: 40,
-        // marginRight: 40
     },
     androidSubmitBtn: {
         backgroundColor: '#007AFF',
         padding: 10,
-        // paddingLeft: 30,
-        // paddingRight: 30,
         borderRadius: 2,
         height: 45,
         alignSelf: 'flex-end',

@@ -1,23 +1,25 @@
 import React, { Component } from 'react'
-import {
-    View,
-    TouchableOpacity,
-    Text,
-    StyleSheet
-} from 'react-native'
+import { View, TouchableOpacity, Text, StyleSheet } from 'react-native'
 import TextButton from './TextButton'
 
 export default class Question extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={{ fontSize: 32 }}>Quiz</Text>
-
                 <Text>Question 2/5, 3 remaining</Text>
 
-                <Text>HTML stands for Hypertext Markup Language -- true or false?</Text>
+                <Text style={styles.question}>
+                    HTML stands for Hypertext Markup Language -- true or false?
+                </Text>
 
-                <TextButton style={{ padding: 10 }}>See the answer</TextButton>
+                <View style={styles.bottom}>
+                    <TextButton
+                        style={{ padding: 10 }}
+                        onPress={() => this.props.navigation.navigate('Answer')}
+                    >
+                        See the answer
+                    </TextButton>
+                </View>
             </View>
         )
     }
@@ -27,7 +29,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        justifyContent: 'flex-end',
     },
     row: {
         flexDirection: 'row',
@@ -37,6 +40,11 @@ const styles = StyleSheet.create({
     bottom: {
         flex: 1,
         justifyContent: 'flex-end'
+    },
+    question: {
+        fontSize: 20,
+        flex: 1,
+        alignSelf: 'center'
     },
     center: {
         flex: 1,

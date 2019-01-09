@@ -14,8 +14,6 @@ export default class NewQuestion extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={{ fontSize: 32 }}>Add a Card</Text>
-
                 <Text>Question</Text>
                 <TextInput
                     multiline={true}

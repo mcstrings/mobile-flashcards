@@ -11,8 +11,6 @@ export default class Decks extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={{ fontSize: 32 }}>Score</Text>
-
                 <Text style={styles.score}>85%</Text>
 
                 <View style={styles.bottom}>
