@@ -11,24 +11,39 @@ import { getDecks } from '../utils/api'
 
 export default class Decks extends Component {
     state = {
-        decks: [],
-        cards: []
+        decks: {},
+        cards: {}
     }
 
     componentDidMount = async () => {
-        const data = await getDecks()
+        const flashcards = await getDecks()
         this.setState({
-            decks: data.Decks,
-            cards: data.Cards
+            ...flashcards
         })
     }
 
-    getDecks = () => {
-        return this.state.decks
+    addDeckToState = (deck) => {
+        const key = Object.keys(deck)[0]
+        const val = Object.values(deck)[0]
+
+        this.setState({
+            decks: {
+                ...this.state.decks,
+                [key]: val
+            }
+        })
     }
 
-    getDeck = (id) => {
-        
+    addCardToState = (card) => {
+        const key = Object.keys(card)[0]
+        const val = Object.values(card)[0]
+
+        this.setState({
+            cards: {
+                ...this.state.cards,
+                [key]: val
+            }
+        })
     }
 
     getCards = (deckID) => {
@@ -41,6 +56,9 @@ export default class Decks extends Component {
             <View style={styles.container}>
                 <FlatList
                     data={Object.values(this.state.decks)}
+                    keyExtractor={(item) => {
+                        return item.id
+                    }}
                     renderItem={({ item }) => (
                         <TouchableOpacity
                             onPress={() => {
@@ -68,7 +86,9 @@ export default class Decks extends Component {
                                 : styles.androidSubmitBtn
                         }
                         onPress={() =>
-                            this.props.navigation.navigate('NewDeck')
+                            this.props.navigation.navigate('NewDeck', {
+                                addDeckToState: this.addDeckToState
+                            })
                         }
                     >
                         <Text style={styles.submitBtnText}>

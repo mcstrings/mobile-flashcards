@@ -6,13 +6,13 @@ export const FLASHCARDS_CARDS_KEY = 'Flashcard:cards'
 
 async function setData() {
     let decks = {
-        webdevelopment: {
-            id: 'webdevelopment',
+        hmrj72ctlrkcm4yav7fb: {
+            id: 'hmrj72ctlrkcm4yav7fb',
             title: 'Web Development',
             cards: ['aajgz2al4570w1ud96bd9f', 'jiqmdod63poiovk75e9i8g']
         },
-        fruits: {
-            id: 'fruits',
+        zkswcrkxo8m2awnxgq22vo: {
+            id: 'zkswcrkxo8m2awnxgq22vo',
             title: 'Fruits',
             cards: [
                 '6trmozuodrr947cc3rdxth',
@@ -20,8 +20,8 @@ async function setData() {
                 'gtec1v290jj40hgatfoyqf'
             ]
         },
-        breakfastfoods: {
-            id: 'breakfastfoods',
+        ulbua9nmlec6lfxgg6dpur: {
+            id: 'ulbua9nmlec6lfxgg6dpur',
             title: 'Breakfast Foods',
             cards: [
                 '5v9nabgcb0uamdc9tgn8bq',
@@ -80,18 +80,13 @@ async function setData() {
         }
     }
 
-    let flashcards = {
-        Decks: { ...decks },
-        Cards: { ...cards }
-    }
-
     try {
-        return await AsyncStorage.setItem(
-            FLASHCARDS_KEY,
-            JSON.stringify(flashcards)
-        )
+        return await AsyncStorage.multiSet([
+            [FLASHCARDS_DECKS_KEY, JSON.stringify({ ...decks })],
+            [FLASHCARDS_CARDS_KEY, JSON.stringify({ ...cards })]
+        ])
     } catch (error) {
-        console.log('ERROR: ', error)
+        console.log('ERROR setData: ', error)
     }
 }
 
@@ -107,34 +102,62 @@ export function generateUID() {
 }
 
 // getDecks: return all of the decks along with their titles, questions, and answers.
-// getDeck: take in a single id argument and return the deck associated with that id.
-// saveDeckTitle: take in a single title argument and add it to the decks.
-// addCardToDeck: take in two arguments, title and card, and will add the card to the list of questions for the deck with the associated title.
 export async function getDecks() {
     try {
         // Remove the key for debugging purposes
-        // await AsyncStorage.removeItem(FLASHCARDS_KEY)
+        await AsyncStorage.removeItem(FLASHCARDS_KEY)
 
-        const results = await AsyncStorage.getItem(FLASHCARDS_KEY)
-        return results === null ? setData() : JSON.parse(results)
+        let results = await AsyncStorage.multiGet([
+            FLASHCARDS_DECKS_KEY,
+            FLASHCARDS_CARDS_KEY
+        ])
+
+        const parsed = results === null ? await setData() : results
+
+        const flashcards = {
+            decks: JSON.parse(parsed[0][1]),
+            cards: JSON.parse(parsed[1][1])
+        }
+
+        return flashcards
     } catch (error) {
-        console.log('ERROR: ', error)
+        console.log('ERROR getDecks: ', error)
     }
 }
 
+// getDeck: take in a single id argument and return the deck associated with that id.
 export async function getDeck(id) {
     try {
-        const results = await AsyncStorage.getItem(FLASHCARDS_KEY)
-        const data = results === null ? null : JSON.parse(results)
-        if (data) {
-            return data.Decks[id]
+        const results = await AsyncStorage.getItem(FLASHCARDS_DECKS_KEY)
+        const decks = results === null ? null : JSON.parse(results)
+        if (decks) {
+            return decks[id]
         }
         return null
     } catch (error) {
-        console.log('ERROR: ', error)
+        console.log('ERROR getDeck: ', error)
     }
 }
 
-export async function saveDeckTitle(title) {}
+// saveDeckTitle: take in a single title argument and add it to the decks.
+export async function saveDeckTitle(title) {
+    const id = generateUID()
 
-export async function addCardToDeck(title, card) {}
+    const newDeck = {
+        [id]: { id, title, cards: [] }
+    }
+
+    await AsyncStorage.mergeItem(FLASHCARDS_DECKS_KEY, JSON.stringify(newDeck))
+    return newDeck
+}
+
+// addCardToDeck: take in two arguments, title and card, and will add the card to the list of questions for the deck with the associated title.
+export async function addCardToDeck(title, card) {
+    const id = generateUID()
+
+    // Find the deck by the title
+
+    const newCard = {
+        id
+    }
+}

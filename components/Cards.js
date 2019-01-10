@@ -17,6 +17,8 @@ export default class Cards extends Component {
         const { navigation } = this.props
         const { getCards, deckID } = navigation.state.params
 
+        // console.log('CARDS', )
+
         return (
             <View style={styles.container}>
                 <View style={styles.center}>
