@@ -7,22 +7,54 @@ import {
     StyleSheet,
     FlatList
 } from 'react-native'
-import { createStackNavigator } from 'react-navigation'
+import { getDecks } from '../utils/api'
 
 export default class Decks extends Component {
+    state = {
+        decks: [],
+        cards: []
+    }
+
+    componentDidMount = async () => {
+        const data = await getDecks()
+        this.setState({
+            decks: data.Decks,
+            cards: data.Cards
+        })
+    }
+
+    getDecks = () => {
+        return this.state.decks
+    }
+
+    getDeck = (id) => {
+        
+    }
+
+    getCards = (deckID) => {
+        const { decks } = this.state
+        return decks[deckID].cards
+    }
+
     render() {
         return (
             <View style={styles.container}>
                 <FlatList
-                    data={[{ key: 'a' }, { key: 'b' }]}
+                    data={Object.values(this.state.decks)}
                     renderItem={({ item }) => (
                         <TouchableOpacity
                             onPress={() => {
-                                this.props.navigation.navigate('Cards')
+                                this.props.navigation.navigate('Cards', {
+                                    deckID: item.id,
+                                    getCards: this.getCards,
+                                    title: item.title
+                                })
                             }}
                         >
                             <View>
-                                <Text style={styles.listItem}>{item.key}</Text>
+                                <Text style={styles.listItem}>
+                                    {item.title}
+                                </Text>
                             </View>
                         </TouchableOpacity>
                     )}
@@ -35,11 +67,8 @@ export default class Decks extends Component {
                                 ? styles.iosSubmitBtn
                                 : styles.androidSubmitBtn
                         }
-                        onPress={
-                            () => this.props.navigation.navigate('NewDeck')
-                            // this.props.navigation.navigate('NewDeck', {
-                            //     deckId: key
-                            // })
+                        onPress={() =>
+                            this.props.navigation.navigate('NewDeck')
                         }
                     >
                         <Text style={styles.submitBtnText}>

@@ -4,14 +4,27 @@ import {
     TouchableOpacity,
     Text,
     Platform,
-    StyleSheet
+    StyleSheet,
+    FlatList
 } from 'react-native'
 
 export default class Cards extends Component {
+    static navigationOptions = ({ navigation }) => ({
+        title: `${navigation.state.params.title}`
+    })
+
     render() {
+        const { navigation } = this.props
+        const { getCards, deckID } = navigation.state.params
+
         return (
             <View style={styles.container}>
-                <Text>5 Cards</Text>
+                <View style={styles.center}>
+                    <Text style={styles.noOfCards}>
+                        {getCards(deckID).length}
+                    </Text>
+                    <Text style={styles.cards}>Cards</Text>
+                </View>
 
                 <View style={styles.bottom}>
                     <TouchableOpacity
@@ -20,22 +33,20 @@ export default class Cards extends Component {
                                 ? styles.iosSubmitOutlineBtn
                                 : styles.androidSubmitOutlineBtn
                         }
-                        onPress={() =>
-                            this.props.navigation.navigate('NewQuestion')
-                        }
+                        onPress={() => navigation.navigate('NewQuestion')}
                     >
-                        <Text style={styles.submitOutlineBtnText}>Add a Card...</Text>
+                        <Text style={styles.submitOutlineBtnText}>
+                            Add a Card...
+                        </Text>
                     </TouchableOpacity>
-    
+
                     <TouchableOpacity
                         style={
                             Platform.OS === 'ios'
                                 ? styles.iosSubmitBtn
                                 : styles.androidSubmitBtn
                         }
-                        onPress={() =>
-                            this.props.navigation.navigate('Question')
-                        }
+                        onPress={() => navigation.navigate('Question')}
                     >
                         <Text style={styles.submitBtnText}>Start the Quiz</Text>
                     </TouchableOpacity>
@@ -60,19 +71,21 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-end'
     },
+    cards: {
+        fontSize: 48
+    },
+    noOfCards: {
+        fontSize: 96
+    },
     iosSubmitBtn: {
         backgroundColor: '#007AFF',
         padding: 10,
         borderRadius: 7,
-        height: 45,
-        // marginLeft: 40,
-        // marginRight: 40
+        height: 45
     },
     androidSubmitBtn: {
         backgroundColor: '#007AFF',
         padding: 10,
-        // paddingLeft: 30,
-        // paddingRight: 30,
         borderRadius: 2,
         height: 45,
         alignSelf: 'flex-end',
@@ -91,8 +104,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 4,
         height: 45,
-        // marginLeft: 40,
-        // marginRight: 40,
         marginBottom: 4
     },
     androidSubmitOutlineBtn: {
@@ -100,8 +111,6 @@ const styles = StyleSheet.create({
         padding: 10,
         borderColor: '#007AFF',
         borderWidth: 1,
-        // paddingLeft: 30,
-        // paddingRight: 30,
         borderRadius: 4,
         height: 45,
         alignSelf: 'flex-end',

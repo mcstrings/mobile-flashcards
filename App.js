@@ -10,7 +10,7 @@ import Score from './components/Score'
 import NewDeck from './components/NewDeck'
 import NewQuestion from './components/NewQuestion'
 
-function UdaciStatusBar({ backgroundColor, ...props }) {
+function FlashcardStatusBar({ backgroundColor, ...props }) {
     return (
         <View style={{ backgroundColor, height: Constants.statusBarHeight }}>
             <StatusBar
@@ -33,7 +33,6 @@ const MainNavigator = createStackNavigator(
         Cards: {
             screen: Cards,
             navigationOptions: {
-                title: 'Cards',
                 headerMode: 'none',
                 headerTitleStyle: {
                     fontSize: 24
@@ -103,7 +102,7 @@ export default class App extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <UdaciStatusBar barStyle="dark-content" />
+                <FlashcardStatusBar barStyle="dark-content" />
                 <MainContainer />
                 {/* <Decks /> */}
                 {/* <Cards /> */}
