@@ -109,6 +109,9 @@ export async function getDecks() {
             FLASHCARDS_CARDS_KEY
         ])
 
+        // TIP: Uncomment and reload to clear things out, then recomment and reload again
+        // results = null
+
         const parsed = results === null ? await setData() : results
 
         const flashcards = {
@@ -167,7 +170,7 @@ export async function addCardToDeck(title, card, deckID) {
             }
         }
 
-        console.log('addCardToDeck', title, deckID, newCard)
+        // console.log('addCardToDeck', title, deckID, newCard)
 
         // Store the new card
         await AsyncStorage.mergeItem(
@@ -182,7 +185,7 @@ export async function addCardToDeck(title, card, deckID) {
         const updatedDeck = {
             [deckID]: { ...deck, cards: [...deck.cards, id] }
         }
-        console.log('get the deck', updatedDeck)
+        // console.log('get the deck', updatedDeck)
 
         // Update storage
         await AsyncStorage.mergeItem(

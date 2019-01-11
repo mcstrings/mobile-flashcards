@@ -79,7 +79,7 @@ export default class Decks extends Component {
     render() {
         const sortedDecks = this.sortByTitle(Object.values(this.state.decks))
 
-        console.log('Decks.js', this.state);
+        // console.log('Decks.js', this.state);
 
         return (
             <View style={styles.container}>
@@ -95,7 +95,8 @@ export default class Decks extends Component {
                                     deckID: item.id,
                                     getCards: this.getCards,
                                     title: item.title,
-                                    addCardToState: this.addCardToState
+                                    addCardToState: this.addCardToState,
+                                    appState: this.state
                                 })
                             }}
                         >

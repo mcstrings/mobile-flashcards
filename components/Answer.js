@@ -10,22 +10,13 @@ import TextButton from './TextButton'
 
 export default class Answer extends Component {
     render() {
+        const { answer } = this.props
+
         return (
             <View style={styles.container}>
-                <Text>Question 2/5, 3 remaining</Text>
-
-                <Text style={styles.answer}>Yes!</Text>
+                <Text style={styles.answer}>{answer}</Text>
 
                 <View style={styles.bottom}>
-                    <TextButton
-                        style={{ padding: 10 }}
-                        onPress={() =>
-                            this.props.navigation.navigate('Question')
-                        }
-                    >
-                        Go back to the question
-                    </TextButton>
-
                     <TouchableOpacity
                         style={
                             Platform.OS === 'ios'
@@ -73,21 +64,19 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end'
     },
     answer: {
-        fontSize: 20
-    },
+        fontSize: 40,
+        flex: 1,
+        alignSelf: 'center'
+},
     iosWrongGuessBtn: {
         backgroundColor: '#E00000',
         padding: 10,
         borderRadius: 7,
         height: 45
-        // marginLeft: 40,
-        // marginRight: 40
     },
     androidWrongGuessBtn: {
         backgroundColor: '#E00000',
         padding: 10,
-        // paddingLeft: 30,
-        // paddingRight: 30,
         borderRadius: 2,
         height: 45,
         alignSelf: 'flex-end',
@@ -105,15 +94,11 @@ const styles = StyleSheet.create({
         borderColor: '#007AFF',
         borderRadius: 4,
         height: 45,
-        // marginLeft: 40,
-        // marginRight: 40,
         marginBottom: 4
     },
     androidCorrectGuessBtn: {
         backgroundColor: '#28AE28',
         padding: 10,
-        // paddingLeft: 30,
-        // paddingRight: 30,
         borderRadius: 4,
         height: 45,
         alignSelf: 'flex-end',

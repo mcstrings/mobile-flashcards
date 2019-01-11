@@ -15,7 +15,12 @@ export default class NewQuestion extends Component {
 
     handleSavePress = async () => {
         const { navigation } = this.props
-        const { addCardToState, deckID, title, getCards } = navigation.state.params
+        const {
+            addCardToState,
+            deckID,
+            title,
+            getCards
+        } = navigation.state.params
         const { question, answer } = this.state
 
         try {
@@ -38,7 +43,7 @@ export default class NewQuestion extends Component {
                 })
             )
 
-            console.log('New Question state', s)
+            // console.log('New Question state', s)
         } catch (error) {
             console.log('ERROR new question save', error)
         }
@@ -50,18 +55,28 @@ export default class NewQuestion extends Component {
                 style={styles.container}
                 keyboardVerticalOffset="80"
             >
-                <Text>Question</Text>
+                <Text style={styles.label}>Question</Text>
                 <TextInput
                     // multiline={true}
-                    style={{ height: 120, borderColor: 'gray', borderWidth: 1 }}
+                    style={{
+                        fontSize: 16,
+                        height: 60,
+                        borderColor: 'gray',
+                        borderWidth: 1
+                    }}
                     onChangeText={(text) => this.setState({ question: text })}
                     value={this.state.question}
                 />
 
-                <Text>Answer</Text>
+                <Text style={styles.label}>Answer</Text>
                 <TextInput
                     // multiline={true}
-                    style={{ height: 120, borderColor: 'gray', borderWidth: 1 }}
+                    style={{
+                        fontSize: 16,
+                        height: 60,
+                        borderColor: 'gray',
+                        borderWidth: 1
+                    }}
                     onChangeText={(text) => this.setState({ answer: text })}
                     value={this.state.answer}
                 />
@@ -98,24 +113,18 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-end'
     },
-    score: {
-        alignItems: 'center',
-        color: '#28AE28',
-        fontSize: 100
+    label: {
+        fontSize: 20
     },
     iosSubmitBtn: {
         backgroundColor: '#007AFF',
         padding: 10,
         borderRadius: 7,
         height: 45
-        // marginLeft: 40,
-        // marginRight: 40
     },
     androidSubmitBtn: {
         backgroundColor: '#007AFF',
         padding: 10,
-        // paddingLeft: 30,
-        // paddingRight: 30,
         borderRadius: 2,
         height: 45,
         alignSelf: 'flex-end',

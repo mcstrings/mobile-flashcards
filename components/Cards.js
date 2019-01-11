@@ -14,9 +14,15 @@ export default class Cards extends Component {
 
     render() {
         const { navigation } = this.props
-        const { getCards, deckID, title, addCardToState } = navigation.state.params
+        const {
+            getCards,
+            deckID,
+            title,
+            addCardToState,
+            appState
+        } = navigation.state.params
 
-        console.log('CARDS', navigation.state.params)
+        // console.log('CARDS', navigation.state.params)
 
         return (
             <View style={styles.container}>
@@ -54,7 +60,15 @@ export default class Cards extends Component {
                                 ? styles.iosSubmitBtn
                                 : styles.androidSubmitBtn
                         }
-                        onPress={() => navigation.navigate('Question')}
+                        onPress={() =>
+                            navigation.navigate('Question', {
+                                deckID,
+                                title,
+                                addCardToState,
+                                getCards,
+                                appState
+                            })
+                        }
                     >
                         <Text style={styles.submitBtnText}>Start the Quiz</Text>
                     </TouchableOpacity>
