@@ -34,28 +34,57 @@ export default class Decks extends Component {
         })
     }
 
-    addCardToState = (card) => {
-        const key = Object.keys(card)[0]
-        const val = Object.values(card)[0]
+    addCardToState = (card, deck, cb) => {
+        const cardKey = Object.keys(card)[0]
+        const cardVal = Object.values(card)[0]
+        const deckKey = Object.keys(deck)[0]
+        const deckVal = Object.values(deck)[0]
 
         this.setState({
             cards: {
                 ...this.state.cards,
-                [key]: val
+                [cardKey]: cardVal
+            },
+            decks: {
+                ...this.state.decks,
+                [deckKey]: deckVal
             }
-        })
+        }, cb)
+
+        return this.state
     }
 
     getCards = (deckID) => {
         const { decks } = this.state
         return decks[deckID].cards
     }
+    
+    sortByTitle = (arr) => {
+        return Object.values(arr).sort((a, b) => {
+            a_title = a.title.toUpperCase()
+            b_title = b.title.toUpperCase()
+
+            if (a_title < b_title) {
+                return -1
+            }
+            if (a_title > b_title) {
+                return 1
+            }
+
+            // names must be equal
+            return 0
+        })       
+    }
 
     render() {
+        const sortedDecks = this.sortByTitle(Object.values(this.state.decks))
+
+        console.log('Decks.js', this.state);
+
         return (
             <View style={styles.container}>
                 <FlatList
-                    data={Object.values(this.state.decks)}
+                    data={sortedDecks}
                     keyExtractor={(item) => {
                         return item.id
                     }}
@@ -65,7 +94,8 @@ export default class Decks extends Component {
                                 this.props.navigation.navigate('Cards', {
                                     deckID: item.id,
                                     getCards: this.getCards,
-                                    title: item.title
+                                    title: item.title,
+                                    addCardToState: this.addCardToState
                                 })
                             }}
                         >
@@ -87,7 +117,9 @@ export default class Decks extends Component {
                         }
                         onPress={() =>
                             this.props.navigation.navigate('NewDeck', {
-                                addDeckToState: this.addDeckToState
+                                addDeckToState: this.addDeckToState,
+                                getCards: this.getCards,
+                                addCardToState: this.addCardToState
                             })
                         }
                     >
@@ -125,14 +157,10 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 7,
         height: 45
-        // marginLeft: 40,
-        // marginRight: 40
     },
     androidSubmitBtn: {
         backgroundColor: '#007AFF',
         padding: 10,
-        // paddingLeft: 30,
-        // paddingRight: 30,
         borderRadius: 2,
         height: 45,
         alignSelf: 'flex-end',

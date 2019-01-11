@@ -7,6 +7,7 @@ import {
     StyleSheet,
     TextInput
 } from 'react-native'
+import { NavigationActions } from 'react-navigation'
 import { saveDeckTitle } from '../utils/api'
 
 export default class NewDeck extends Component {
@@ -14,12 +15,22 @@ export default class NewDeck extends Component {
 
     handleSavePress = async () => {
         const { navigation } = this.props
-        const { addDeckToState } = navigation.state.params
+        const {
+            addDeckToState,
+            addCardToState,
+            getCards
+        } = navigation.state.params
 
         const newDeck = await saveDeckTitle(this.state.title)
+        
         addDeckToState(newDeck)
 
-        navigation.goBack()
+        navigation.replace('Cards', {
+            deckID: Object.values(newDeck)[0]['id'],
+            getCards: getCards,
+            title: Object.values(newDeck)[0]['title'],
+            addCardToState: addCardToState
+        })
     }
 
     render() {

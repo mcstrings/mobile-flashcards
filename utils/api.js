@@ -104,9 +104,6 @@ export function generateUID() {
 // getDecks: return all of the decks along with their titles, questions, and answers.
 export async function getDecks() {
     try {
-        // Remove the key for debugging purposes
-        await AsyncStorage.removeItem(FLASHCARDS_KEY)
-
         let results = await AsyncStorage.multiGet([
             FLASHCARDS_DECKS_KEY,
             FLASHCARDS_CARDS_KEY
@@ -141,23 +138,60 @@ export async function getDeck(id) {
 
 // saveDeckTitle: take in a single title argument and add it to the decks.
 export async function saveDeckTitle(title) {
-    const id = generateUID()
+    try {
+        const id = generateUID()
 
-    const newDeck = {
-        [id]: { id, title, cards: [] }
+        const newDeck = {
+            [id]: { id, title, cards: [] }
+        }
+
+        await AsyncStorage.mergeItem(
+            FLASHCARDS_DECKS_KEY,
+            JSON.stringify(newDeck)
+        )
+        return newDeck
+    } catch (error) {
+        console.log('ERROR saveDeckTitle', error)
     }
-
-    await AsyncStorage.mergeItem(FLASHCARDS_DECKS_KEY, JSON.stringify(newDeck))
-    return newDeck
 }
 
 // addCardToDeck: take in two arguments, title and card, and will add the card to the list of questions for the deck with the associated title.
-export async function addCardToDeck(title, card) {
-    const id = generateUID()
+export async function addCardToDeck(title, card, deckID) {
+    try {
+        const id = generateUID()
 
-    // Find the deck by the title
+        const newCard = {
+            [id]: {
+                ...card,
+                id
+            }
+        }
 
-    const newCard = {
-        id
+        console.log('addCardToDeck', title, deckID, newCard)
+
+        // Store the new card
+        await AsyncStorage.mergeItem(
+            FLASHCARDS_CARDS_KEY,
+            JSON.stringify(newCard)
+        )
+
+        // Find the deck by the title
+        const deck = await getDeck(deckID)
+
+        // Add the card to the deck blob
+        const updatedDeck = {
+            [deckID]: { ...deck, cards: [...deck.cards, id] }
+        }
+        console.log('get the deck', updatedDeck)
+
+        // Update storage
+        await AsyncStorage.mergeItem(
+            FLASHCARDS_DECKS_KEY,
+            JSON.stringify(updatedDeck)
+        )
+
+        return { card: { ...newCard }, deck: { ...updatedDeck } }
+    } catch (error) {
+        console.log('ERROR addCardToDeck', error)
     }
 }

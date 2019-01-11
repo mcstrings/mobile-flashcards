@@ -5,18 +5,54 @@ import {
     Text,
     Platform,
     StyleSheet,
-    TextInput
+    TextInput,
+    KeyboardAvoidingView
 } from 'react-native'
+import { addCardToDeck } from '../utils/api'
 
 export default class NewQuestion extends Component {
     state = { question: '', answer: '' }
 
+    handleSavePress = async () => {
+        const { navigation } = this.props
+        const { addCardToState, deckID, title, getCards } = navigation.state.params
+        const { question, answer } = this.state
+
+        try {
+            // Create the card
+            const cardBlob = {
+                question,
+                answer
+            }
+
+            const cardAndDeck = await addCardToDeck(title, cardBlob, deckID)
+            const { card, deck } = cardAndDeck
+
+            // Update the state
+            const s = addCardToState(card, deck, () =>
+                navigation.navigate('Cards', {
+                    deckID,
+                    title,
+                    addCardToState,
+                    getCards
+                })
+            )
+
+            console.log('New Question state', s)
+        } catch (error) {
+            console.log('ERROR new question save', error)
+        }
+    }
+
     render() {
         return (
-            <View style={styles.container}>
+            <KeyboardAvoidingView
+                style={styles.container}
+                keyboardVerticalOffset="80"
+            >
                 <Text>Question</Text>
                 <TextInput
-                    multiline={true}
+                    // multiline={true}
                     style={{ height: 120, borderColor: 'gray', borderWidth: 1 }}
                     onChangeText={(text) => this.setState({ question: text })}
                     value={this.state.question}
@@ -24,7 +60,7 @@ export default class NewQuestion extends Component {
 
                 <Text>Answer</Text>
                 <TextInput
-                    multiline={true}
+                    // multiline={true}
                     style={{ height: 120, borderColor: 'gray', borderWidth: 1 }}
                     onChangeText={(text) => this.setState({ answer: text })}
                     value={this.state.answer}
@@ -37,12 +73,12 @@ export default class NewQuestion extends Component {
                                 ? styles.iosSubmitBtn
                                 : styles.androidSubmitBtn
                         }
-                        // onPress={onPress}
+                        onPress={() => this.handleSavePress()}
                     >
                         <Text style={styles.submitBtnText}>Save</Text>
                     </TouchableOpacity>
                 </View>
-            </View>
+            </KeyboardAvoidingView>
         )
     }
 }
@@ -71,7 +107,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#007AFF',
         padding: 10,
         borderRadius: 7,
-        height: 45,
+        height: 45
         // marginLeft: 40,
         // marginRight: 40
     },
