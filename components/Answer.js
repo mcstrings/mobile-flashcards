@@ -66,7 +66,8 @@ const styles = StyleSheet.create({
     answer: {
         fontSize: 40,
         flex: 1,
-        alignSelf: 'center'
+        alignSelf: 'center',
+        marginBottom: 10
 },
     iosWrongGuessBtn: {
         backgroundColor: '#E00000',

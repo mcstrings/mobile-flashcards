@@ -9,6 +9,7 @@ import Answer from './components/Answer'
 import Score from './components/Score'
 import NewDeck from './components/NewDeck'
 import NewQuestion from './components/NewQuestion'
+import { setLocalNotification } from './utils/helpers'
 
 function FlashcardStatusBar({ backgroundColor, ...props }) {
     return (
@@ -27,7 +28,7 @@ const MainNavigator = createStackNavigator(
         Home: {
             screen: Decks,
             navigationOptions: {
-                title: 'Flashcard Decks',
+                title: 'Flashcard Decks'
             }
         },
         Cards: {
@@ -86,7 +87,6 @@ const MainNavigator = createStackNavigator(
         }
     },
     {
-        // headerMode: 'none',
         mode: 'modal',
         navigationOptions: {
             headerTitleStyle: {
@@ -99,18 +99,15 @@ const MainNavigator = createStackNavigator(
 
 const MainContainer = createAppContainer(MainNavigator)
 export default class App extends React.Component {
+    componentDidMount = () => {
+        setLocalNotification()
+    }
+
     render() {
         return (
             <View style={styles.container}>
                 <FlashcardStatusBar barStyle="dark-content" />
                 <MainContainer />
-                {/* <Decks /> */}
-                {/* <Cards /> */}
-                {/* <Question /> */}
-                {/* <Answer /> */}
-                {/* <Score /> */}
-                {/* <NewDeck /> */}
-                {/* <NewQuestion /> */}
             </View>
         )
     }
