@@ -18,18 +18,17 @@ export default class Cards extends Component {
             getCards,
             deckID,
             title,
-            addCardToState,
-            appState
+            addCardToState
         } = navigation.state.params
+
+        const numberOfCards = getCards(deckID).length
 
         // console.log('CARDS', navigation.state.params)
 
         return (
             <View style={styles.container}>
                 <View style={styles.center}>
-                    <Text style={styles.noOfCards}>
-                        {getCards(deckID).length}
-                    </Text>
+                    <Text style={styles.noOfCards}>{numberOfCards}</Text>
                     <Text style={styles.cards}>Cards</Text>
                 </View>
 
@@ -54,24 +53,27 @@ export default class Cards extends Component {
                         </Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity
-                        style={
-                            Platform.OS === 'ios'
-                                ? styles.iosSubmitBtn
-                                : styles.androidSubmitBtn
-                        }
-                        onPress={() =>
-                            navigation.navigate('Question', {
-                                deckID,
-                                title,
-                                addCardToState,
-                                getCards,
-                                appState
-                            })
-                        }
-                    >
-                        <Text style={styles.submitBtnText}>Start the Quiz</Text>
-                    </TouchableOpacity>
+                    {numberOfCards > 0 && (
+                        <TouchableOpacity
+                            style={
+                                Platform.OS === 'ios'
+                                    ? styles.iosSubmitBtn
+                                    : styles.androidSubmitBtn
+                            }
+                            onPress={() =>
+                                navigation.navigate('Question', {
+                                    deckID,
+                                    title,
+                                    addCardToState,
+                                    getCards
+                                })
+                            }
+                        >
+                            <Text style={styles.submitBtnText}>
+                                Start the Quiz
+                            </Text>
+                        </TouchableOpacity>
+                    )}
                 </View>
             </View>
         )

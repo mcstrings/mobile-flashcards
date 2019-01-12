@@ -10,7 +10,7 @@ import TextButton from './TextButton'
 
 export default class Answer extends Component {
     render() {
-        const { answer } = this.props
+        const { answer, handleGuess } = this.props
 
         return (
             <View style={styles.container}>
@@ -23,7 +23,7 @@ export default class Answer extends Component {
                                 ? styles.iosCorrectGuessBtn
                                 : styles.androidCorrectGuessBtn
                         }
-                        // onPress={onPress}
+                        onPress={() => handleGuess(true)}
                     >
                         <Text style={styles.submitCorrectGuessBtnText}>
                             My guess was right
@@ -36,7 +36,7 @@ export default class Answer extends Component {
                                 ? styles.iosWrongGuessBtn
                                 : styles.androidWrongGuessBtn
                         }
-                        // onPress={onPress}
+                        onPress={() => handleGuess(false)}
                     >
                         <Text style={styles.submitWrongGuessBtnText}>
                             My guess was wrong

@@ -1,43 +1,79 @@
 import React, { Component } from 'react'
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native'
 import TextButton from './TextButton'
-import Answer from './Answer';
+import Answer from './Answer'
+import Score from './Score'
 
 export default class Question extends Component {
-    state = {
+    initBlob = {
         cards: [],
         currentCardIndex: 0,
         showAnswer: false,
         isFinishedQuiz: false,
+        guesses: [],
         score: 0
+    }
+
+    state = {
+        ...this.initBlob
     }
 
     componentDidMount = () => {
         const { navigation } = this.props
-        const { getCards, deckID, appState } = navigation.state.params
+        const { getCards, deckID } = navigation.state.params
 
-        const cardIDs = getCards(deckID)
-
-        const cards = cardIDs.map((cardID) => {
-            return appState.cards[cardID]
-        })
-
-        // console.log('what is cards?', cards)
+        const cards = getCards(deckID)
 
         this.setState({
             cards
         })
+
+        // console.log(' Quiz componentDidMount', cards)
     }
 
-    handleToAnswer = () => {
+    resetQuiz = () => {
         this.setState({
-            showAnswer: true
+            ...this.initBlob
         })
     }
 
-    handleToQuestion = () => {
+    handleGuess = (isCorrectGuess) => {
+        const incrementCurrentCardIndex = ++this.state.currentCardIndex
+
+        const guesses = [...this.state.guesses, isCorrectGuess ? 1 : 0]
+
+        const isItFinishedYet =
+            incrementCurrentCardIndex + 1 > this.state.cards.length
+                ? true
+                : false
+
         this.setState({
-            showAnswer: false
+            currentCardIndex: incrementCurrentCardIndex,
+            isFinishedQuiz: isItFinishedYet,
+            showAnswer: false,
+            guesses
+        })
+
+        // TODO: Save?
+    }
+
+    calculateScore = () => {
+        const { cards, guesses } = this.state
+
+        const length = cards.length
+
+        const totalCorrectAnswers = guesses.reduce((prev, curr) => {
+            return prev + curr
+        }, 0)
+
+        const score = parseInt((totalCorrectAnswers / length) * 100, 10)
+
+        return score
+    }
+
+    toggleAnswer = (isShowingQuestion) => {
+        this.setState({
+            showAnswer: isShowingQuestion
         })
     }
 
@@ -47,7 +83,6 @@ export default class Question extends Component {
             currentCardIndex,
             showAnswer,
             isFinishedQuiz,
-            score
         } = this.state
 
         const card = cards[currentCardIndex]
@@ -56,34 +91,45 @@ export default class Question extends Component {
 
         return (
             <View style={styles.container}>
-                <Text>
-                    Question {currentCardIndex + 1} of {total},{' '}
-                    {remaining} remaining
-                </Text>
+                {!isFinishedQuiz && (
+                    <Text>
+                        Question {currentCardIndex + 1} of {total}, {remaining}{' '}
+                        remaining
+                    </Text>
+                )}
 
-                {showAnswer ? (
-                    <Answer answer={card && card.answer} />
+                {showAnswer && !isFinishedQuiz ? (
+                    <Answer
+                        answer={card && card.answer}
+                        handleGuess={this.handleGuess}
+                    />
                 ) : (
                     <Text style={styles.question}>{card && card.question}</Text>
                 )}
 
-                <View style={styles.bottom}>
-                    {showAnswer ? (
-                        <TextButton
-                            style={{ padding: 10 }}
-                            onPress={() => this.handleToQuestion()}
-                        >
-                            Go back to the question
-                        </TextButton>
-                    ) : (
-                        <TextButton
-                            style={{ padding: 10 }}
-                            onPress={() => this.handleToAnswer()}
-                        >
-                            See the answer
-                        </TextButton>
-                    )}
-                </View>
+                {isFinishedQuiz ? (
+                    <View style={styles.top}>
+                        <Score score={this.calculateScore()} navigation={this.props.navigation} />
+                    </View>
+                ) : (
+                    <View style={styles.bottom}>
+                        {showAnswer ? (
+                            <TextButton
+                                style={{ padding: 10 }}
+                                onPress={() => this.toggleAnswer(false)}
+                            >
+                                Go back to the question
+                            </TextButton>
+                        ) : (
+                            <TextButton
+                                style={{ padding: 10 }}
+                                onPress={() => this.toggleAnswer(true)}
+                            >
+                                See the answer
+                            </TextButton>
+                        )}
+                    </View>
+                )}
             </View>
         )
     }
@@ -93,28 +139,19 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: 'white',
-        justifyContent: 'flex-end'
+        backgroundColor: 'white'
+        // justifyContent: 'flex-end'
     },
-    row: {
-        flexDirection: 'row',
+    top: {
         flex: 1,
-        alignItems: 'center'
+        marginTop: -100
     },
     bottom: {
-        flex: 1,
         justifyContent: 'flex-end'
     },
     question: {
         fontSize: 40,
         flex: 1,
         alignSelf: 'center'
-    },
-    center: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginLeft: 30,
-        marginRight: 30
     }
 })

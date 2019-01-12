@@ -56,7 +56,14 @@ export default class Decks extends Component {
 
     getCards = (deckID) => {
         const { decks } = this.state
-        return decks[deckID].cards
+
+        const cardIDs = decks[deckID].cards
+
+        const cards = cardIDs.map((cardID) => {
+            return this.state.cards[cardID]
+        })
+
+        return cards
     }
     
     sortByTitle = (arr) => {
@@ -95,8 +102,7 @@ export default class Decks extends Component {
                                     deckID: item.id,
                                     getCards: this.getCards,
                                     title: item.title,
-                                    addCardToState: this.addCardToState,
-                                    appState: this.state
+                                    addCardToState: this.addCardToState
                                 })
                             }}
                         >

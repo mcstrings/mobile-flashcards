@@ -8,10 +8,26 @@ import {
 } from 'react-native'
 
 export default class Decks extends Component {
+    handleRetakeQuiz = () => {
+        const { navigation } = this.props
+        const { getCards, deckID, title, addCardToState } = navigation.state.params
+
+        navigation.navigate('Cards', {
+            deckID,
+            title,
+            addCardToState,
+            getCards
+        })
+    }
+
     render() {
+        const { score } = this.props
+
         return (
-            <View style={styles.container}>
-                <Text style={styles.score}>85%</Text>
+            <View>
+                <View style={styles.top}>
+                    <Text style={styles.score}>{score}%</Text>
+                </View>
 
                 <View style={styles.bottom}>
                     <TouchableOpacity
@@ -20,7 +36,7 @@ export default class Decks extends Component {
                                 ? styles.iosSubmitBtn
                                 : styles.androidSubmitBtn
                         }
-                        // onPress={onPress}
+                        onPress={() => this.handleRetakeQuiz()}
                     >
                         <Text style={styles.submitBtnText}>
                             Retake the Quiz
@@ -33,22 +49,18 @@ export default class Decks extends Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-        backgroundColor: 'white'
+    scoreContainer: {
+        backgroundColor: 'white',
+        justifyContent: 'space-between'
     },
-    row: {
-        flexDirection: 'row',
-        flex: 1,
-        alignItems: 'center'
+    top: {
+        justifyContent: 'flex-start'
     },
     bottom: {
-        flex: 1,
         justifyContent: 'flex-end'
     },
     score: {
-        alignItems: 'center',
+        alignSelf: 'center',
         color: '#28AE28',
         fontSize: 100
     },
@@ -57,8 +69,6 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 7,
         height: 45
-        // marginLeft: 40,
-        // marginRight: 40
     },
     androidSubmitBtn: {
         backgroundColor: '#007AFF',
@@ -73,12 +83,5 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 22,
         textAlign: 'center'
-    },
-    center: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginLeft: 30,
-        marginRight: 30
     }
 })

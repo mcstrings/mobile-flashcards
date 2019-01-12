@@ -36,7 +36,7 @@ export default class NewDeck extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.bottom}>Title</Text>
+                <Text style={styles.label}>Title</Text>
                 <TextInput
                     style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
                     onChangeText={(text) => this.setState({ title: text })}
