@@ -2,7 +2,7 @@ import React from 'react'
 import { AsyncStorage } from 'react-native'
 import { Notifications, Permissions } from 'expo'
 
-const NOTIFICATION_KEY = 'Flashcards:notifications'
+export const NOTIFICATION_KEY = 'Flashcards:notifications'
 
 export function getDailyReminderValue() {
     return {
