@@ -1,4 +1,5 @@
 import { AsyncStorage } from 'react-native'
+import { NOTIFICATION_KEY } from './helpers'
 
 export const FLASHCARDS_KEY = 'Flashcards'
 export const FLASHCARDS_DECKS_KEY = 'Flashcard:decks'
@@ -110,6 +111,7 @@ export async function getDecks() {
         ])
 
         // TIP: Uncomment and reload to clear things out, then recomment and reload again
+        // await AsyncStorage.removeItem(NOTIFICATION_KEY)
         // results = null
 
         const parsed = results === null ? await setData() : results
@@ -170,8 +172,6 @@ export async function addCardToDeck(title, card, deckID) {
             }
         }
 
-        // console.log('addCardToDeck', title, deckID, newCard)
-
         // Store the new card
         await AsyncStorage.mergeItem(
             FLASHCARDS_CARDS_KEY,
@@ -185,7 +185,6 @@ export async function addCardToDeck(title, card, deckID) {
         const updatedDeck = {
             [deckID]: { ...deck, cards: [...deck.cards, id] }
         }
-        // console.log('get the deck', updatedDeck)
 
         // Update storage
         await AsyncStorage.mergeItem(

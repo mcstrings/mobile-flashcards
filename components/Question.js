@@ -27,8 +27,6 @@ export default class Question extends Component {
         this.setState({
             cards
         })
-
-        // console.log(' Quiz componentDidMount', cards)
     }
 
     resetQuiz = () => {

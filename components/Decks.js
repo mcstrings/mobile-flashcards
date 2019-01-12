@@ -90,8 +90,6 @@ export default class Decks extends Component {
     render() {
         const sortedDecks = this.sortByTitle(Object.values(this.state.decks))
 
-        // console.log('Decks.js', this.state);
-
         return (
             <View style={styles.container}>
                 <FlatList

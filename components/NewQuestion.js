@@ -42,8 +42,6 @@ export default class NewQuestion extends Component {
                     getCards
                 })
             )
-
-            // console.log('New Question state', s)
         } catch (error) {
             console.log('ERROR new question save', error)
         }

@@ -16,7 +16,6 @@ function FlashcardStatusBar({ backgroundColor, ...props }) {
         <View style={{ backgroundColor, height: Constants.statusBarHeight }}>
             <StatusBar
                 translucent
-                // backgroundColor={backgroundColor}
                 {...props}
             />
         </View>

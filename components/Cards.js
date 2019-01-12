@@ -23,8 +23,6 @@ export default class Cards extends Component {
 
         const numberOfCards = getCards(deckID).length
 
-        // console.log('CARDS', navigation.state.params)
-
         return (
             <View style={styles.container}>
                 <View style={styles.center}>
